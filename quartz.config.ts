@@ -1,5 +1,12 @@
 import { QuartzConfig } from "./quartz/cfg"
 import * as Plugin from "./quartz/plugins"
+import { QuartzPluginData } from "./quartz/plugins/vfile"
+
+const sortData: (f1: QuartzPluginData, f2: QuartzPluginData) => number = (f1, f2) => {
+  const f1Title = f1.frontmatter?.title.toLowerCase() ?? ""
+  const f2Title = f2.frontmatter?.title.toLowerCase() ?? ""
+  return f1Title.localeCompare(f2Title)
+}
 
 /**
  * Quartz 4.0 Configuration
@@ -75,8 +82,8 @@ const config: QuartzConfig = {
       Plugin.AliasRedirects(),
       Plugin.ComponentResources(),
       Plugin.ContentPage(),
-      Plugin.FolderPage(),
-      Plugin.TagPage(),
+      Plugin.FolderPage({ sort: sortData }),
+      Plugin.TagPage({ sort: sortData }),
       Plugin.ContentIndex({
         enableSiteMap: true,
         enableRSS: true,
